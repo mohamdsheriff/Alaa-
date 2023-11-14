@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alaa Attendance Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0; /* Light Gray */
+        }
+
+        h2 {
+            color: #333; /* Dark Gray */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .checked {
+            text-decoration: line-through;
+            color: #4CAF50; /* Green */
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Alaa Attendance Tracker</h2>
+    <ul id="attendanceList"></ul>
+    <button onclick="clearChecks()">Clear All Checks</button>
+
+    <script>
+        // Sample array of random IDs
+        const randomIds = ["ABC123", "XYZ789", "123DEF", "456GHI", "789JKL"];
+
+        // Sort the IDs in ascending order
+        randomIds.sort();
+
+        // Function to create checkboxes for each ID
+        function createCheckboxes() {
+            const attendanceList = document.getElementById("attendanceList");
+
+            // Clear existing list items
+            attendanceList.innerHTML = "";
+
+            // Loop through sorted IDs and create list items with checkboxes
+            for (const id of randomIds) {
+                const listItem = document.createElement("li");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = id;
+                const label = document.createElement("label");
+                label.htmlFor = id;
+                label.innerHTML = id;
+
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+
+                attendanceList.appendChild(listItem);
+            }
+        }
+
+        // Initial creation of checkboxes
+        createCheckboxes();
+
+        // Event listener to update the list when a checkbox is clicked
+        document.getElementById("attendanceList").addEventListener("change", function (event) {
+            const checkbox = event.target;
+            const label = document.querySelector(`label[for="${checkbox.id}"]`);
+
+            // Update label content with a check sign when the checkbox is checked
+            if (checkbox.checked) {
+                label.innerHTML = `${id} &#10003;`;
+                label.classList.add("checked");
+            } else {
+                label.innerHTML = id;
+                label.classList.remove("checked");
+            }
+
+            // Sort the IDs based on checked status
+            randomIds.sort((a, b) => {
+                const checkboxA = document.getElementById(a);
+                const checkboxB = document.getElementById(b);
+
+                if (checkboxA.checked && !checkboxB.checked) {
+                    return -1;
+                } else if (!checkboxA.checked && checkboxB.checked) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+            // Recreate checkboxes with updated order
+            createCheckboxes();
+        });
+
+        // Function to clear all check signs
+        function clearChecks() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                label.innerHTML = checkbox.id;
+                label.classList.remove("checked");
+            });
+        }
+    </script>
+</body>
+</html>
